@@ -1,1 +1,5 @@
-INSERT INTO resources (name) VALUES ('Equipment list'), ('Equipment profits'), ('Human diagnostic experiences');
+INSERT INTO industries (name) VALUES ('制造业'), ('火力发电'), ('石油化工'), ('水泥生产'), ('环境保护'), ('建筑'), ('空调系统');
+INSERT INTO resources (name) VALUES ('Equipment list'), ('Equipment profits'), ('Human diagnostic experiences'),('传感器数据'),('历史案例文本记录'),('设备列表'),('设备更换记录'),('设备寿命记录'),('设备工艺参数'),('设备价值'),('设备利润'),('历史气象数据'),('实时气象数据'),('污染物来源数据'),('生产参数记录'),('产品质量记录'),('历史环境数据'),('设备控制参数'),('历史观察数据');
+INSERT INTO deliverables (name) VALUES ('机械故障预测'),('故障解决方案'),('相似历史故障'),('最佳设备更换时机'),('空气质量预测'),('最优生产参数'),('最优设置');
+INSERT INTO technologies (name) VALUES ('传感器拓扑图'),('机器学习'),('自然语言处理'),('机器学习'),('信息检索'),('对抗生成网络'),('深度神经网络'),('强化学习');
+INSERT INTO projects (name) VALUES ('预测性维护'), ('故障诊断'), ('工件寿命预测'), ('空气质量预测'), ('产品质量优化'), ('楼宇暖风节能'), ('工业节能');
