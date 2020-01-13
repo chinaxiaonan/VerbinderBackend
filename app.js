@@ -34,6 +34,23 @@ app.get('/api/resources', (req, res) => {
     });
 });
 
+app.get('/api/technologies', (req, res) => {
+    const obj = req.query.q || '' ? {
+        where: {
+            name: {
+                [Op.iLike]: '%' + req.query.q.trim() + '%'
+            }
+        }
+    } : {};
+    Resource.findAll(obj).then(technologies => {
+        res.set({
+            'Access-Control-Allow-Origin': 'http://localhost:4200'
+        }).send({
+            result: technologies
+        });
+    });
+});
+
 /**
  * {name:'',requirement:'',industry:'',deliverable:'',resources:[],technologies:[]}
  */
