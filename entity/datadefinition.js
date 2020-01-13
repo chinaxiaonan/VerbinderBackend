@@ -10,6 +10,10 @@ const Industry = sequelizeInstance.define('industry', {
     name: {
         type: Sequlize.STRING(100),
         allowNull: false
+    },
+    owner: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
     }
 });
 
@@ -25,7 +29,14 @@ const Project = sequelizeInstance.define('project', {
     },
     requirement: {
         type: Sequlize.TEXT,
-        allowNull: false
+        defaultValue: ''
+    },
+    owner: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
+    },
+    contact: {
+        type: Sequlize.STRING(100)
     }
 });
 
@@ -38,6 +49,10 @@ const Deliverable = sequelizeInstance.define('deliverable', {
     name: {
         type: Sequlize.STRING(100),
         allowNull: false
+    },
+    owner: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
     }
 });
 
@@ -50,6 +65,10 @@ const Resource = sequelizeInstance.define('resource', {
     name: {
         type: Sequlize.STRING(100),
         allowNull: false
+    },
+    owner: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
     }
 });
 
@@ -62,12 +81,15 @@ const Technology = sequelizeInstance.define('technology', {
     name: {
         type: Sequlize.STRING(100),
         allowNull: false
+    },
+    owner: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
     }
 });
 
 Industry.hasMany(Project);
-Project.belongsToMany(Deliverable, {through: 'project_deliverable'});
-Deliverable.belongsToMany(Project, {through: 'project_deliverable'});
+Deliverable.hasMany(Project);
 
 Project.belongsToMany(Resource, {through: 'project_resource'});
 Resource.belongsToMany(Project, {through: 'project_resource'});
