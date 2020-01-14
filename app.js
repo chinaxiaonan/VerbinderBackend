@@ -43,6 +43,7 @@ app.get('/api/technologies', (req, res) => {
         }
     } : {};
     Technology.findAll(obj).then(technologies => {
+
         res.set({
             'Access-Control-Allow-Origin': 'http://localhost:4200'
         }).send({
