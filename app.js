@@ -12,9 +12,9 @@ const {
 } = require('sequelize');
 const app = express();
 
-sequelizeInstance.sync({
+sequelizeInstance.sync(/* {
     force: true
-}).then(()=>console.log("===============!!!!!"));
+} */).then(()=>console.log("===============!!!!!"));
 app.listen(4500, () => console.log('server started on port 4500!'))
 
 app.get('/api/resources', (req, res) => {
@@ -30,6 +30,23 @@ app.get('/api/resources', (req, res) => {
             'Access-Control-Allow-Origin': 'http://localhost:4200'
         }).send({
             result: resources
+        });
+    });
+});
+
+app.get('/api/technologies', (req, res) => {
+    const obj = req.query.q || '' ? {
+        where: {
+            name: {
+                [Op.iLike]: '%' + req.query.q.trim() + '%'
+            }
+        }
+    } : {};
+    Technology.findAll(obj).then(technologies => {
+        res.set({
+            'Access-Control-Allow-Origin': 'http://localhost:4200'
+        }).send({
+            result: technologies
         });
     });
 });
@@ -126,7 +143,9 @@ async function findMatch(project, industry, deliverable, resources, technologies
         });
         for(let fr of foundResources){
             ps = await fr.getProjects();
-            ps.forEach(pp=>projects.push(pp));
+            ps.forEach(pp=>{
+                if(pp.owner==0) projects.push(pp);
+            });
         }
     }
     // find by same technologies
@@ -136,7 +155,10 @@ async function findMatch(project, industry, deliverable, resources, technologies
         });
         for(let ft of foundTechs){
             ps = await ft.getProjects();
-            ps.forEach(pp=>projects.push(pp));
+            ps.forEach(pp=>{
+                if(pp.owner==0) projects.push(pp);
+            });
+            
         }
     }
     return projects;
@@ -146,6 +168,7 @@ async function buildDataByProjects(projects){
     datas = [];
     tmps = {};
     for(let p of projects){
+        console.log(p.name);
         tmp = {source: project.name, target: project.requirement, rela: 'Requires'};
         if(!tmps[project.name+project.requirement+'Requires']){
             tmps[project.name+project.requirement+'Requires'] = 1;
