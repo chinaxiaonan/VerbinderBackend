@@ -165,44 +165,56 @@ async function findMatch(project, industry, deliverable, resources, technologies
     return projects;
 }
 
+/**
+ * 
+ * type: 0/project node; 1/requirement node; 2/contact node; 3/industry node; 4/deliverable node; 
+ *      5/resource node; 6/technology node;
+ */
 async function buildDataByProjects(projects){
     datas = [];
     tmps = {};
     for(let p of projects){
         console.log(p.name);
-        tmp = {source: project.name, target: project.requirement, rela: 'Requires'};
+        
         if(!tmps[project.name+project.requirement+'Requires']){
             tmps[project.name+project.requirement+'Requires'] = 1;
+            tmp = {source: {name:project.name,type:0}, target:{name:project.requirement,type:1}, rela: 'Requires'};
             datas.push(tmp);
         }
         
+        if(!tmps[project.name+project.contact+'Contacts']){
+            tmps[project.name+project.contact+'Contacts'] = 1;
+            tmp = {source: {name:project.name,type:0}, target: {name:project.contact,type:2}, rela: 'Contacts'};
+            datas.push(tmp);
+        }
+
         industry = await Industry.findByPk(p.industryId);
-        tmp = {source: p.name, target: industry.name, rela:'Belongs'};
         if(!tmps[p.name+industry.name+'Belongs']){
             tmps[p.name+industry.name+'Belongs'] = 1;
+            tmp = {source: {name:p.name,type:0}, target: {name:industry.name,type:3}, rela:'Belongs'};
             datas.push(tmp);
         }
 
         deliverable = await Deliverable.findByPk(p.deliverableId);
-        tmp = {source: p.name, target: deliverable.name, rela:'Expects'};
         if(!tmps[p.name+deliverable.name+'Expects']){
             tmps[p.name+deliverable.name+'Expects'] = 1;
+            tmp = {source: {name:p.name,type:0}, target: {name:deliverable.name,type:4}, rela:'Expects'};
             datas.push(tmp);
         }
 
         resources = await p.getResources();
         for(let r of resources){
-            tmp = {source: p.name, target: r.name, rela: 'Has'};
             if(!tmps[p.name+r.name+'Has']){
                 tmps[p.name+r.name+'Has'] = 1;
+                tmp = {source: {name:p.name,type:0}, target: {name:r.name,type:5}, rela: 'Has'};
                 datas.push(tmp);
             }
         }
         technologies = await p.getTechnologies();
         for(let t of technologies){
-            tmp = {source: p.name, target: t.name, rela: 'Uses'};
             if(!tmps[p.name+t.name+'Uses']){
                 tmps[p.name+t.name+'Uses'] = 1;
+                tmp = {source: {name:p.name,type:0}, target: {name:t.name,type:6}, rela: 'Uses'};
                 datas.push(tmp);
             }
         }
