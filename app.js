@@ -12,9 +12,26 @@ const {
 } = require('sequelize');
 const app = express();
 
-sequelizeInstance.sync(/* {
-    force: true
-} */).then(()=>console.log("===============!!!!!"));
+app.use(function(req, res, next){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE');
+    next();
+});
+
+app.use(express.json());
+
+const userRoutes = require('./routes/user.route');
+const industryRoutes = require('./routes/industry.route');
+const technologyRoutes = require('./routes/technology.route');
+const bookmarkRoutes = require('./routes/bookmark.route');
+
+app.use('/api/user', userRoutes);
+app.use('/api/industry', industryRoutes);
+app.use('/api/technology', technologyRoutes);
+app.use('/api/bookmarks', bookmarkRoutes);
+sequelizeInstance.sync({
+    //force: true
+}).then(()=>console.log("===============!!!!!"));
 app.listen(4500, () => console.log('server started on port 4500!'))
 
 app.get('/api/resources', (req, res) => {
@@ -30,24 +47,6 @@ app.get('/api/resources', (req, res) => {
             'Access-Control-Allow-Origin': 'http://localhost:4200'
         }).send({
             result: resources
-        });
-    });
-});
-
-app.get('/api/technologies', (req, res) => {
-    const obj = req.query.q || '' ? {
-        where: {
-            name: {
-                [Op.iLike]: '%' + req.query.q.trim() + '%'
-            }
-        }
-    } : {};
-    Technology.findAll(obj).then(technologies => {
-
-        res.set({
-            'Access-Control-Allow-Origin': 'http://localhost:4200'
-        }).send({
-            result: technologies
         });
     });
 });

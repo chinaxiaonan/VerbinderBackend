@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 const sequelizeInstance = new Sequelize('verbinder', 'postgres', null, {
     dialect: 'postgres',
-    host: 'localhost',
+    //host: '10.192.27.112',
+    host: '127.0.0.1',
     define: {
         timestamps:false
     }
