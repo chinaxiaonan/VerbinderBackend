@@ -11,7 +11,6 @@ const {
     Op
 } = require('sequelize');
 const app = express();
-
 app.use(function(req, res, next){
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE');
@@ -24,11 +23,13 @@ const userRoutes = require('./routes/user.route');
 const industryRoutes = require('./routes/industry.route');
 const technologyRoutes = require('./routes/technology.route');
 const bookmarkRoutes = require('./routes/bookmark.route');
+const projectRoutes = require('./routes/project.route');
 
 app.use('/api/user', userRoutes);
 app.use('/api/industry', industryRoutes);
 app.use('/api/technology', technologyRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
+app.use('/api/project', projectRoutes);
 sequelizeInstance.sync({
     //force: true
 }).then(()=>console.log("===============!!!!!"));

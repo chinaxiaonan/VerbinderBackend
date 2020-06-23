@@ -7,7 +7,7 @@ const Industry = sequelizeInstance.define('industry', {
         primaryKey: true,
         autoIncrement: true
     },
-    namekey: {
+    name: {
         type: Sequlize.STRING(200),
         allowNull: false
     },
@@ -40,9 +40,32 @@ const Project = sequelizeInstance.define('project', {
         type: Sequlize.STRING(100),
         allowNull: false
     },
+    desctext:{
+        type: Sequlize.TEXT,
+        defaultValue: ''
+    },
     requirement: {
         type: Sequlize.TEXT,
         defaultValue: ''
+    },
+    shortvalue:{
+        type: Sequlize.STRING(100),
+        defaultValue: ''
+    },
+    pvalue: {
+        type: Sequlize.TEXT,
+        defaultValue: ''
+    },
+    techdesc: {
+        type: Sequlize.TEXT,
+        defaultValue: ''
+    },
+    imgpath: {
+        type: Sequlize.STRING(100),
+        defaultValue:''
+    },
+    customer: {
+        type: Sequlize.STRING(200)
     },
     owner: {
         type: Sequlize.INTEGER,
@@ -50,7 +73,11 @@ const Project = sequelizeInstance.define('project', {
     },
     contact: {
         type: Sequlize.STRING(100)
-    }
+    },
+    status: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
+    },
 });
 
 const Deliverable = sequelizeInstance.define('deliverable', {
@@ -91,19 +118,24 @@ const Technology = sequelizeInstance.define('technology', {
         primaryKey: true,
         autoIncrement: true
     },
-    namekey: {
+    name: {
         type: Sequlize.STRING(200),
         allowNull: false
     },
-    desciption: {
+    desctext: {
         type: Sequlize.TEXT
     },
-    imagepath: {
-        type: Sequlize.STRING(200)
+    iconpath: {
+        type: Sequlize.STRING(200),
+        defaultValue:''
     },
-    displayinmain: {
-        type: Sequlize.BOOLEAN,
-        defaultValue: false
+    imagepath: {
+        type: Sequlize.STRING(200),
+        defaultValue:''
+    },
+    status: {
+        type: Sequlize.INTEGER,
+        defaultValue: 0
     },
     owner: {
         type: Sequlize.INTEGER,
@@ -112,12 +144,13 @@ const Technology = sequelizeInstance.define('technology', {
 });
 
 
-
-Industry.hasMany(Project);
 Deliverable.hasMany(Project);
 
 Project.belongsToMany(Resource, {through: 'project_resource'});
 Resource.belongsToMany(Project, {through: 'project_resource'});
+
+Project.belongsToMany(Industry, {through:'project_industry'});
+Industry.belongsToMany(Project, {through:'project_industry'});
 
 Project.belongsToMany(Technology, {through: 'project_technology'});
 Technology.belongsToMany(Project, {through: 'project_technology'});
@@ -160,6 +193,10 @@ const BookmarkFolder = sequelizeInstance.define('bookmarkfolder', {
     },
     folderdesc: {
         type: Sequlize.TEXT
+    },
+    imgpath: {
+        type: Sequlize.STRING(100),
+        defaultValue:'defaultcase.png'
     }
 });
 
